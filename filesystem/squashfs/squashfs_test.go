@@ -15,12 +15,12 @@ import (
 	"strings"
 	"testing"
 
-	diskfs "github.com/diskfs/go-diskfs"
-	"github.com/diskfs/go-diskfs/backend/file"
-	"github.com/diskfs/go-diskfs/disk"
-	"github.com/diskfs/go-diskfs/filesystem"
-	"github.com/diskfs/go-diskfs/filesystem/squashfs"
-	"github.com/diskfs/go-diskfs/testhelper"
+	diskfs "github.com/ghp3000/go-diskfs"
+	"github.com/ghp3000/go-diskfs/backend/file"
+	"github.com/ghp3000/go-diskfs/disk"
+	"github.com/ghp3000/go-diskfs/filesystem"
+	"github.com/ghp3000/go-diskfs/filesystem/squashfs"
+	"github.com/ghp3000/go-diskfs/testhelper"
 )
 
 func getOpenMode(mode int) string {

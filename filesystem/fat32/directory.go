@@ -3,7 +3,7 @@ package fat32
 import (
 	"fmt"
 
-	"github.com/diskfs/go-diskfs/util/timestamp"
+	"github.com/ghp3000/go-diskfs/util/timestamp"
 )
 
 // Directory represents a single directory in a FAT32 filesystem

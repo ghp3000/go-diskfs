@@ -5,12 +5,12 @@ import (
 	"log"
 	"os"
 
-	diskfs "github.com/diskfs/go-diskfs"
-	"github.com/diskfs/go-diskfs/backend/file"
-	"github.com/diskfs/go-diskfs/disk"
-	"github.com/diskfs/go-diskfs/filesystem"
-	"github.com/diskfs/go-diskfs/partition/gpt"
-	"github.com/diskfs/go-diskfs/partition/mbr"
+	diskfs "github.com/ghp3000/go-diskfs"
+	"github.com/ghp3000/go-diskfs/backend/file"
+	"github.com/ghp3000/go-diskfs/disk"
+	"github.com/ghp3000/go-diskfs/filesystem"
+	"github.com/ghp3000/go-diskfs/partition/gpt"
+	"github.com/ghp3000/go-diskfs/partition/mbr"
 )
 
 func check(err error) {

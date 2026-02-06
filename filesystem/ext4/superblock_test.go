@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/diskfs/go-diskfs/testhelper"
+	"github.com/ghp3000/go-diskfs/testhelper"
 	"github.com/go-test/deep"
 )
 

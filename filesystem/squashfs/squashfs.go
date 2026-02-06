@@ -8,10 +8,11 @@ import (
 	"math"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
-	"github.com/diskfs/go-diskfs/backend"
-	"github.com/diskfs/go-diskfs/filesystem"
+	"github.com/ghp3000/go-diskfs/backend"
+	"github.com/ghp3000/go-diskfs/filesystem"
 )
 
 const (
@@ -27,6 +28,7 @@ type FileSystem struct {
 	workspace  string
 	superblock *superblock
 	size       int64
+	offset     uint64
 	start      int64
 	backend    backend.Storage
 	blocksize  int64
@@ -36,6 +38,54 @@ type FileSystem struct {
 	xattrs     *xAttrTable
 	rootDir    inode
 	cache      *lru
+}
+
+func (fs *FileSystem) Size() uint64 {
+	return fs.offset + 1024
+}
+
+// AddFile 将文件添加到文件系统
+// src 要加入的源文件的地址
+// dst 加入的文件在这个文件系统下的路径
+func (fs *FileSystem) AddFile(src string, dst string) error {
+	f1, err := os.Open(src)
+	if err != nil {
+		return fmt.Errorf("source file: %v", err)
+	}
+	f2, err := fs.OpenFile(dst, os.O_CREATE|os.O_RDWR)
+	if err != nil {
+		return err
+	}
+	defer f2.Close()
+	defer f1.Close()
+	_, err = io.Copy(f2, f1)
+	return err
+}
+func (fs *FileSystem) AddDir(srcFolder string, dst string) error {
+	return filepath.Walk(srcFolder, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		relPath, err := filepath.Rel(srcFolder, path)
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return fs.Mkdir(filepath.Join(dst, relPath))
+		}
+		if !info.IsDir() {
+			rw, err := fs.OpenFile(filepath.Join(dst, relPath), os.O_CREATE|os.O_RDWR)
+			in, errorOpeningFile := os.Open(path)
+			if errorOpeningFile != nil {
+				return errorOpeningFile
+			}
+			defer in.Close()
+			defer rw.Close()
+			_, err = io.Copy(rw, in)
+			return err
+		}
+		return nil
+	})
 }
 
 // Equal compare if two filesystems are equal
@@ -69,7 +119,7 @@ func (fs *FileSystem) Workspace() string {
 // 20GB, and create a small filesystem of size 50MB that begins 2GB into the disk.
 // This is extremely useful for creating filesystems on disk partitions.
 //
-// Note, however, that it is much easier to do this using the higher-level APIs at github.com/diskfs/go-diskfs
+// Note, however, that it is much easier to do this using the higher-level APIs at github.com/ghp3000/go-diskfs
 // which allow you to work directly with partitions, rather than having to calculate (and hopefully not make any errors)
 // where a partition starts and ends.
 //
@@ -111,7 +161,7 @@ func Create(b backend.Storage, size, start, blocksize int64) (*FileSystem, error
 // 20GB, and a small filesystem of size 50MB that begins 2GB into the disk.
 // This is extremely useful for working with filesystems on disk partitions.
 //
-// Note, however, that it is much easier to do this using the higher-level APIs at github.com/diskfs/go-diskfs
+// Note, however, that it is much easier to do this using the higher-level APIs at github.com/ghp3000/go-diskfs
 // which allow you to work directly with partitions, rather than having to calculate (and hopefully not make any errors)
 // where a partition starts and ends.
 //

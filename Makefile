@@ -1,6 +1,6 @@
 .PHONY: test image unit_test
 
-PACKAGE_NAME?=github.com/diskfs/go-diskfs
+PACKAGE_NAME?=github.com/ghp3000/go-diskfs
 IMAGE ?= diskfs/go-diskfs:build
 GOENV ?= GO111MODULE=on CGO_ENABLED=0
 GO_FILES ?= $(shell $(GOENV) go list ./...)

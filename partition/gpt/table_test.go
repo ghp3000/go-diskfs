@@ -14,8 +14,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/diskfs/go-diskfs/partition/gpt"
-	"github.com/diskfs/go-diskfs/testhelper"
+	"github.com/ghp3000/go-diskfs/partition/gpt"
+	"github.com/ghp3000/go-diskfs/testhelper"
 	"github.com/go-test/deep"
 )
 

@@ -313,6 +313,11 @@ const (
 	zstdMaxLevel uint32 = 22
 )
 
+func NewCompressorZstd(level uint32) Compressor {
+	return &CompressorZstd{
+		level: level,
+	}
+}
 func (c *CompressorZstd) loadOptions(b []byte) error {
 	expected := 4
 	if len(b) != expected {

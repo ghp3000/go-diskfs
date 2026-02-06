@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/diskfs/go-diskfs/util/printer"
+	"github.com/ghp3000/go-diskfs/util/printer"
 	"github.com/google/go-cmp/cmp"
 )
 

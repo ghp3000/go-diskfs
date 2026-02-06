@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/diskfs/go-diskfs/backend"
-	"github.com/diskfs/go-diskfs/partition/part"
+	"github.com/ghp3000/go-diskfs/backend"
+	"github.com/ghp3000/go-diskfs/partition/part"
 )
 
 var _ part.Partition = &Partition{}

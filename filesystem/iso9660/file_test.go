@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/diskfs/go-diskfs/filesystem/iso9660"
+	"github.com/ghp3000/go-diskfs/filesystem/iso9660"
 )
 
 func TestFileRead(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/diskfs/go-diskfs/backend"
+	"github.com/ghp3000/go-diskfs/backend"
 	"github.com/pkg/xattr"
 )
 
@@ -112,6 +112,7 @@ func (fs *FileSystem) Finalize(options FinalizeOptions) error {
 
 	// location holds where we are writing in our file
 	var (
+		size     uint64
 		location int64
 		b        []byte
 	)
@@ -297,6 +298,7 @@ func (fs *FileSystem) Finalize(options FinalizeOptions) error {
 
 	// write the uidgid table
 	idTableWritten, idTableLocation, err := writeIDTable(idtable, f, compressor, location)
+	size = max(size, idTableLocation+uint64(idTableWritten))
 	if err != nil {
 		return fmt.Errorf("error writing uidgid table: %v", err)
 	}
@@ -313,6 +315,7 @@ func (fs *FileSystem) Finalize(options FinalizeOptions) error {
 			return fmt.Errorf("error writing xattrs table: %v", err)
 		}
 		location += int64(xAttrsWritten)
+		size = max(size, xAttrsLocation+uint64(xAttrsWritten))
 	}
 
 	// update and write the superblock
@@ -353,13 +356,14 @@ func (fs *FileSystem) Finalize(options FinalizeOptions) error {
 			exportable:            !options.NonExportable,
 		},
 	}
+	fs.offset = max(size, uint64(location))
 
 	// write the superblock
 	sbBytes := sb.toBytes()
 	if _, err := f.WriteAt(sbBytes, 0); err != nil {
 		return fmt.Errorf("failed to write superblock: %v", err)
 	}
-
+	fs.superblock = sb
 	// finish by setting as finalized
 	fs.workspace = ""
 	return nil

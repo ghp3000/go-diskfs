@@ -9,8 +9,8 @@ import (
 	"strings"
 	"unicode/utf16"
 
-	"github.com/diskfs/go-diskfs/backend"
-	"github.com/diskfs/go-diskfs/partition/part"
+	"github.com/ghp3000/go-diskfs/backend"
+	"github.com/ghp3000/go-diskfs/partition/part"
 	uuid "github.com/google/uuid"
 )
 

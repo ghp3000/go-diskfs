@@ -7,7 +7,7 @@ import (
 	"io/fs"
 	"os"
 
-	"github.com/diskfs/go-diskfs/backend"
+	"github.com/ghp3000/go-diskfs/backend"
 )
 
 type rawBackend struct {

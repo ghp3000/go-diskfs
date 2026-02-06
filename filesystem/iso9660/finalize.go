@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/diskfs/go-diskfs/backend"
-	"github.com/diskfs/go-diskfs/version"
 	"github.com/djherbis/times"
+	"github.com/ghp3000/go-diskfs/backend"
+	"github.com/ghp3000/go-diskfs/version"
 )
 
 const (
