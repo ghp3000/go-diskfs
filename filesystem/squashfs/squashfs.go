@@ -61,7 +61,20 @@ func (fs *FileSystem) AddFile(src string, dst string) error {
 	_, err = io.Copy(f2, f1)
 	return err
 }
-func (fs *FileSystem) AddDir(srcFolder string, dst string) error {
+
+func (fs *FileSystem) AddDir(srcFolder string, dst string, progressCb func(total, current int64, fileName string)) error {
+	var totalSize, current int64
+	if progressCb != nil {
+		_ = filepath.Walk(srcFolder, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return nil
+			}
+			if !info.IsDir() {
+				totalSize += info.Size()
+			}
+			return nil
+		})
+	}
 	return filepath.Walk(srcFolder, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -81,7 +94,12 @@ func (fs *FileSystem) AddDir(srcFolder string, dst string) error {
 			}
 			defer in.Close()
 			defer rw.Close()
-			_, err = io.Copy(rw, in)
+
+			n, err := io.Copy(rw, in)
+			if progressCb != nil {
+				current += n
+				progressCb(totalSize, current, relPath)
+			}
 			return err
 		}
 		return nil
