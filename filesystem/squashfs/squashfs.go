@@ -142,13 +142,23 @@ func (fs *FileSystem) Workspace() string {
 // where a partition starts and ends.
 //
 // If the provided blocksize is 0, it will use the default of 128 KB.
-func Create(b backend.Storage, size, start, blocksize int64) (*FileSystem, error) {
+func Create(b backend.Storage, size, start, blocksize int64, workspace ...string) (*FileSystem, error) {
 	if blocksize == 0 {
 		blocksize = defaultBlockSize
 	}
 	// make sure it is an allowed blocksize
 	if err := validateBlocksize(blocksize); err != nil {
 		return nil, err
+	}
+
+	if len(workspace) > 0 {
+		return &FileSystem{
+			workspace: workspace[0],
+			start:     start,
+			size:      size,
+			backend:   b,
+			blocksize: blocksize,
+		}, nil
 	}
 
 	// create a temporary working area where we can create the filesystem.
